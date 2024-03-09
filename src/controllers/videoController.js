@@ -1,43 +1,53 @@
-const fakeUser = {
-  userName: "Nicolas",
-  loginIn: false,
+import Video from "../models/Video.js";
+
+/*
+export const home = (req, res) => {
+  Video.find({}, (error, videos) => {
+    if (error) {
+      return res.render("error-page");
+    } else {
+      return res.render("home", videos);
+    }
+  });
+  console.log("finished");
+};
+*/
+
+export const home = async (req, res) => {
+  const videos = await Video.find({});
+  return res.render("home", { videos });
 };
 
-export const trending = (req, res) => {
-  const videos = [
-    {
-      title: "First Video",
-      rating: 5,
-      comments: 2,
-      createdAt: "2 month ago",
-      views: 34,
-      id: 1,
-    },
-    {
-      title: "Second Video",
-      rating: 5,
-      comments: 2,
-      createdAt: "2 month ago",
-      views: 34,
-      id: 1,
-    },
-    {
-      title: "Third Video",
-      rating: 5,
-      comments: 2,
-      createdAt: "2 month ago",
-      views: 34,
-      id: 1,
-    },
-  ];
-  res.render("home", { pageTitle: "home", fakeUser, videos });
+export const watch = (req, res) => {
+  const { id } = req.params;
+  return res.render("watch", { pageTitle: `${video.title}` });
+};
+export const getEdit = (req, res) => {
+  const { id } = req.params;
+  return res.render("edit", { pageTitle: `Editing: ${video.title}` });
 };
 
-export const see = (req, res) => res.render("watch");
-export const edit = (req, res) => res.render("edit");
-export const search = (req, res) => res.send("search!");
-export const upload = (req, res) => res.send("upload");
-export const deleteVideo = (req, res) => {
-  console.log(req.params);
-  res.send("Delete Video");
+export const postEdit = (req, res) => {
+  const { id } = req.params;
+  const { title } = req.body;
+  return res.redirect(`/video/${id}`);
+};
+
+export const getUpload = (req, res) => {
+  return res.render("upload", { pageTitle: "Upload Video" });
+};
+
+export const postUpload = async (req, res) => {
+  let { title, description, hashtags } = req.body;
+  await Video.create({
+    title: title,
+    description: description,
+    createdAt: new Date(),
+    hashtags: hashtags.split(",").map((item) => `#${item}`),
+    meta: {
+      views: 0,
+      rating: 0,
+    },
+  });
+  return res.redirect("/");
 };
