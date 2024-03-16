@@ -12,9 +12,11 @@ html(lang="ko")
             a(href="/") Home   
           if loggedIn
             li
-              a(href="/logout") Log out    
+              a(href="/user/edit") Edit Profile
+            li
+              a(href="/user/logout") Log out              
             li 
-              a(href="/my-profile") #{loggedInUser.name}의 프로파일           
+              a(href="/video/upload") Upload Video   
           else 
             li
               a(href="/join") Join               
@@ -22,8 +24,6 @@ html(lang="ko")
               a(href="/login") login
           li
             a(href="/search") Search   
-          li 
-            a(href="/video/upload") Upload Video
     main
       block content
       include partials/footer.pug
